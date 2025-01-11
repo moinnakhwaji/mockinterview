@@ -7,6 +7,7 @@ export async function GET(req: Request, { params }: any) {
   const { interviewid } = resolvedSearchParams;
 
   try {
+    
     // Ensure the database connection is established
     await dbConnect();
 
