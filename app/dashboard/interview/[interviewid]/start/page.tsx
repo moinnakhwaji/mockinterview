@@ -42,7 +42,7 @@ const Start = ({ params }: { params: { interviewid: string } }) => {
         }
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching user data:");
         setLoading(false);
       }
     };
