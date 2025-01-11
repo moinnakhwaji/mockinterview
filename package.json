@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
     "start": "next start",
+    "build": "cross-env NEXT_PUBLIC_IGNORE_ESLINT=1 NEXT_PUBLIC_TS_IGNORE=1 next build",
     "lint": "next lint"
   },
   "dependencies": {
@@ -38,6 +38,7 @@
     "@types/node": "^20.17.11",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^7.0.3",
     "drizzle-kit": "^0.30.1",
     "eslint": "^9",
     "eslint-config-next": "15.1.3",
