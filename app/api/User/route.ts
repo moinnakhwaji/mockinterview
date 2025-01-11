@@ -3,7 +3,7 @@ import User from "@/models/User"; // Adjust path based on your project structure
 import moment from "moment";
 
 
-export async function POST(req: Request, { params }: { params: { interviewid: string } }) {
+export async function POST(req: Request, { params }: { params: { interviewid: any } }) {
   await dbConnect();
 const resolved = await params
   try {
