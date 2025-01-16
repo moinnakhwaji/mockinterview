@@ -80,7 +80,8 @@ const HomePage = () => {
 
         {/* Footer Section */}
         <footer className="bg-[#1f1e24] py-8 text-center text-sm text-[#d1d1d1]">
-          <p>&copy; 2025 Mock Interview Application. All Rights Reserved.</p>
+        <p>&copy; 2025 Mock Interview Application. All Rights Reserved. Designed by Moin.</p>
+
           <div className="mt-4 flex justify-center gap-6">
             <a
               href="https://github.com/moinnakhwaji"
