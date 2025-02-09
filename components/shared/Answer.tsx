@@ -7,7 +7,7 @@ import { chatSession } from "@/lib/Giminiai";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { LuWebcam } from "react-icons/lu"; // Webcam icon
+import { LuWebcam } from "react-icons/lu";
 
 interface AnswerProps {
   currentindex: number;
@@ -18,10 +18,12 @@ interface AnswerProps {
 const Answer: React.FC<AnswerProps> = ({ currentindex, jsonMockResp, interviewId }) => {
   const [Useranser, setUseranser] = useState<string>("");
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const parsedResp = jsonMockResp ? JSON.parse(jsonMockResp) : { questions: [] };
+  const parsedResp = jsonMockResp
+    ? { questions: JSON.parse(jsonMockResp) }
+    : { questions: [] };
   const [selectedQuestionIndex, setSelectedQuestionIndex] = useState<number>(currentindex);
   const [Loading, setIsLoading] = useState<boolean>(false);
-  const [webcamOpen, setWebcamOpen] = useState<boolean>(false); // Track webcam state
+  const [webcamOpen, setWebcamOpen] = useState<boolean>(false);
 
   const router = useRouter();
   const { user } = useUser();
@@ -41,12 +43,10 @@ const Answer: React.FC<AnswerProps> = ({ currentindex, jsonMockResp, interviewId
 
   const handleRecording = () => {
     if (isRecording) {
-      console.log("Stopping recording...");
       stopSpeechToText();
     } else {
-      console.log("Starting recording...");
       startSpeechToText();
-      setWebcamOpen(true); // Set webcam as open when recording starts
+      setWebcamOpen(true);
     }
   };
 
@@ -60,7 +60,7 @@ const Answer: React.FC<AnswerProps> = ({ currentindex, jsonMockResp, interviewId
     }
   }, [results]);
 
-   const Saveuser = async () => {
+  const Saveuser = async () => {
     if (isRecording) {
       stopSpeechToText();
     }
@@ -71,8 +71,7 @@ const Answer: React.FC<AnswerProps> = ({ currentindex, jsonMockResp, interviewId
     }
 
     setIsSaving(true);
-    const question =
-      parsedResp.questions[currentindex]?.question || "Unknown question";
+    const question = parsedResp.questions[currentindex]?.question || "Unknown question";
 
     const feedbackPrompt = `
       Question: ${question},
@@ -113,7 +112,7 @@ const Answer: React.FC<AnswerProps> = ({ currentindex, jsonMockResp, interviewId
       }
       setUseranser("");
       setIsSaving(false);
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(`Error saving answer: ${error.message || "Please check the console for details"}`);
       console.error("Error during save:", error);
       setIsSaving(false);
@@ -128,8 +127,7 @@ const Answer: React.FC<AnswerProps> = ({ currentindex, jsonMockResp, interviewId
 
   const UpdateUserAnswer = async () => {
     setIsLoading(true);
-    const question =
-      parsedResp.questions[currentindex]?.question || "Unknown question";
+    const question = parsedResp.questions[currentindex]?.question || "Unknown question";
 
     const feedbackPrompt = `
       Question: ${question},
@@ -164,10 +162,9 @@ const Answer: React.FC<AnswerProps> = ({ currentindex, jsonMockResp, interviewId
 
       if (response) {
         toast.success("Answer saved successfully!");
-        setResults([])
-
+        setResults([]);
       }
-      setResults([])
+      setResults([]);
       setUseranser("");
       setIsSaving(false);
     } catch (error) {
@@ -219,20 +216,8 @@ const Answer: React.FC<AnswerProps> = ({ currentindex, jsonMockResp, interviewId
             {isRecording ? "Stop Recording" : "Start Recording"}
           </Button>
         </div>
-
-        {/* Save Answer Button */}
-        {/* <Button
-          disabled={isSaving || isRecording}
-          onClick={Saveuser}
-          className={`px-8 py-3 rounded-full font-medium transition duration-300 ${
-            isSaving ? "opacity-50 cursor-not-allowed" : "bg-white hover:bg-gray-200"
-          } text-black`}
-        >
-          {isSaving ? "Saving..." : "Save Answer"}
-        </Button> */}
       </div>
 
-      {/* Error Message */}
       {error && (
         <p className="text-red-500 text-center mt-6 text-lg">
           Error: {error || "Speech-to-text not supported"}

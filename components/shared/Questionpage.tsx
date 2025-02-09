@@ -8,7 +8,7 @@ interface Question {
 
 // Define the props for Questionpage
 interface QuestionPageProps {
-  jsonMockResp: string | { questions: Question[] }; // It could be a JSON string or an object with questions
+  jsonMockResp: string | Question[] | { questions: Question[] }; // Accept array, JSON string, or formatted object
   currentindex: number;
   onIndexChange: (index: number) => void;
 }
@@ -20,9 +20,13 @@ const Questionpage: React.FC<QuestionPageProps> = ({
 }) => {
   let parsedResp: { questions: Question[] } = { questions: [] };
 
-  if (typeof jsonMockResp === "string") {
+  // Ensure jsonMockResp is formatted correctly
+  if (Array.isArray(jsonMockResp)) {
+    parsedResp = { questions: jsonMockResp }; // Convert array to expected format
+  } else if (typeof jsonMockResp === "string") {
     try {
-      parsedResp = JSON.parse(jsonMockResp);
+      const parsedData = JSON.parse(jsonMockResp);
+      parsedResp = Array.isArray(parsedData) ? { questions: parsedData } : parsedData;
     } catch (error) {
       console.error("Failed to parse JSON:", error);
     }
@@ -34,7 +38,7 @@ const Questionpage: React.FC<QuestionPageProps> = ({
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-100 p-6">
       {/* Top Section: Question Buttons */}
       <div className="flex justify-center space-x-4 overflow-x-auto scrollbar-hide mb-8">
-        {parsedResp.questions && parsedResp.questions.length > 0 ? (
+        {parsedResp.questions.length > 0 ? (
           parsedResp.questions.map((item, index) => (
             <button
               key={index}
